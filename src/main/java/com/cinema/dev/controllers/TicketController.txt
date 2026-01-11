@@ -1,0 +1,49 @@
+package com.cinema.dev.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.cinema.dev.models.Ticket;
+
+import lombok.AllArgsConstructor;
+
+@Controller
+@AllArgsConstructor
+public class TicketController {
+    private final ticketRepository
+
+    /**
+     * Afficher le formulaire de saisie ticket
+     */
+@GetMapping("/tickets/nouveau")
+public String ticketForm(Model model) {
+    // Indiquer quel fragment charger
+    model.addAttribute("content", "pages/tickets/ticket-saisie");
+
+    // Messages toast optionnels
+    model.addAttribute("toastMessage", null);
+    model.addAttribute("toastType", null);
+
+    return "admin-layout"; // le layout principal
+}
+
+
+
+
+    /**
+     * Soumission du formulaire (statique pour le moment)
+     */
+    @PostMapping("/tickets/save")
+    public String enregistrer(@ModelAttribute Ticket ticket) {
+
+        // 🔴 Pour l'instant aucune sauvegarde
+        // Plus tard : ticketRepository.save(ticket);
+
+        System.out.println("Ticket reçu : " + ticket);
+
+        return "redirect:/tickets/nouveau";
+    }
+}

@@ -1,0 +1,42 @@
+package com.cinema.dev.mappers;
+
+
+import com.cinema.dev.dtos.UtilisateurDTO;
+import com.cinema.dev.models.Utilisateur;
+import com.cinema.dev.models.UtilisateurRole;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UtilisateurMapper {
+
+    public static UtilisateurDTO toDTO(Utilisateur utilisateur) {
+        List<Long> roleIds = utilisateur.getRoles() == null ? List.of() :
+            utilisateur.getRoles()
+                       .stream()
+                       .map(ur -> ur.getRole().getId())
+                       .collect(Collectors.toList());
+
+        return new UtilisateurDTO(
+            utilisateur.getId(),
+            utilisateur.getNom(),
+            utilisateur.getPrenoms(),
+            utilisateur.getDateNaissance(),
+            utilisateur.getEmail(),
+            utilisateur.getPasse(),
+            roleIds
+        );
+    }
+
+    public static Utilisateur toEntity(UtilisateurDTO dto, List<UtilisateurRole> roles) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(dto.getId());
+        utilisateur.setNom(dto.getNom());
+        utilisateur.setPrenoms(dto.getPrenoms());
+        utilisateur.setDateNaissance(dto.getDateNaissance());
+        utilisateur.setEmail(dto.getEmail());
+        utilisateur.setPasse(dto.getPasse());
+        utilisateur.setRoles(roles);
+        return utilisateur;
+    }
+}

@@ -1,0 +1,9 @@
+package com.cinema.dev.repositories;
+
+import com.cinema.dev.models.Salle;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+public interface SalleRepository extends JpaRepository<Salle, Long>, JpaSpecificationExecutor<Salle> {
+
+}
