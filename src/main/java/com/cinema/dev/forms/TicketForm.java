@@ -10,7 +10,7 @@ public class TicketForm {
 
     private Long blocId;
 
-    private Integer nbrPlace;
+    // private Integer nbrPlace;
 
     private LocalDateTime datePrevue;
 
@@ -21,11 +21,11 @@ public class TicketForm {
     private Long idFilm; // Add this line
 
     public void control() throws Exception {
-        if (nbrPlace == null || nbrPlace <= 0) {
-            throw new Exception("Le nombre de places doit être supérieur à zéro.");
-        }
-        if (numeroPlace == null || numeroPlace.size() != nbrPlace) {
-            throw new Exception("Le nombre de numéros de places doit correspondre au nombre de places.");
+        // if (nbrPlace == null || nbrPlace <= 0) {
+        //     throw new Exception("Le nombre de places doit être supérieur à zéro.");
+        // }
+        if (numeroPlace == null || numeroPlace.isEmpty()) {
+            throw new Exception("La liste des numéros de places ne peut pas être nulle ou vide.");
         }
         if (datePrevue == null || datePrevue.isBefore(LocalDateTime.now())) {
             throw new Exception("La date prévue doit être une date future.");
@@ -39,9 +39,7 @@ public class TicketForm {
         if (numeroPlace == null || numeroPlace.isEmpty()) {
             throw new Exception("La liste des numéros de places ne peut pas être nulle ou vide.");
         }
-        if (numeroPlace.size() != nbrPlace) {
-            throw new Exception("Le nombre de numéros de places doit correspondre au nombre de places.");
-        }
+      
     }
 
 }
