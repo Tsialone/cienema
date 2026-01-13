@@ -1,6 +1,0 @@
-package com.cinema.dev.repositories;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.cinema.dev.models.UtilisateurRole;
-
-public interface UtilisateurRoleRepository extends JpaRepository<UtilisateurRole, Long> {}

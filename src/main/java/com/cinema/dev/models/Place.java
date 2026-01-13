@@ -1,6 +1,12 @@
 package com.cinema.dev.models;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.cinema.dev.repositories.PlaceRepository;
+import com.cinema.dev.repositories.ReservationRepository;
+import com.cinema.dev.repositories.TicketRepository;
+import com.cinema.dev.utils.DateUtils;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,11 +30,11 @@ public class Place {
     private Long idPlace;
 
     @Column(name = "numero", nullable = false)
-    private Long numero;
+    private Integer numero;
 
     @ManyToOne
-    @JoinColumn(name = "id_bloc", nullable = false)
-    private Bloc bloc;
+    @JoinColumn(name = "id_cp", nullable = false)
+    private CategoriePlace categoriePlace;
 
     @ManyToOne
     @JoinColumn(name = "id_salle", nullable = false)
@@ -46,4 +52,42 @@ public class Place {
     public String getStrId() {
         return str + idPlace;
     }
+
+    @Transient
+    public Double getPrixPlace() {
+        return this.categoriePlace.getPrix().doubleValue();
+    }
+
+    @Transient
+    public boolean isDispo(LocalDateTime dateTime, TicketRepository ticketRepository) {
+        for (Ticket ticket : ticketRepository.findAll()) {
+            Seance seance = ticket.getSeance();
+            LocalDateTime debut = seance.getDateTimeDebut();
+            LocalDateTime fin = seance.getDateFinPrevue();
+
+            LocalDateTime dateTimeFin = dateTime.plusMinutes(ticket.getFilm().getDuree().getHour() * 60
+                    + ticket.getFilm().getDuree().getMinute());
+            // if (DateUtils.isConflit(debut, fin, dateTime)) {
+            // System.out.println("Place non dispo: " + this.getStrId() + " pour la date " +
+            // dateTime);
+            // System.out.println("Conflit avec la séance du " + debut + " au " + fin);
+            // return false;
+            // }
+
+            if (this.idPlace.equals(ticket.getPlace().getIdPlace()) && DateUtils.isConflit(debut, fin, dateTime, dateTimeFin)) {
+                return false;
+            }
+            if (this.idPlace.equals(ticket.getPlace().getIdPlace())) {
+                System.out.println("Place dispo: " + this.getStrId() + " pour la date " +
+                        dateTime);
+                System.out.println("Pas de conflit avec la séance du " + debut + " au " +
+                        fin);
+                System.out.println("\n");
+
+            }
+
+        }
+        return true;
+    }
+
 }

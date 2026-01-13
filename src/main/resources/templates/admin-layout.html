@@ -77,6 +77,31 @@
             });
         }
     </script>
+
+    <script>
+        console.log("GLOBAL SCRIPT LOADED");
+
+        document.addEventListener("change", function (e) {
+
+            if (e.target && e.target.id === "checkAll") {
+                const checked = e.target.checked;
+                document.querySelectorAll(".place-checkbox").forEach(cb => {
+                    cb.checked = checked;
+                });
+            }
+
+            if (e.target && e.target.classList.contains("place-checkbox")) {
+                const all = document.querySelectorAll(".place-checkbox");
+                const checked = document.querySelectorAll(".place-checkbox:checked");
+                const checkAll = document.getElementById("checkAll");
+
+                if (checkAll) {
+                    checkAll.checked = (all.length === checked.length);
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>
