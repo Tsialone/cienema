@@ -8,9 +8,11 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cinema.dev.views.SeanceDetail;
+import com.cinema.dev.views.SeanceRecap;
 
 @Entity
 @Getter
@@ -37,9 +39,46 @@ public class Seance {
     @JoinColumn(name = "id_film", nullable = false)
     private Film film;
 
+    @OneToMany(mappedBy = "seance", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Ticket> tickets = new ArrayList<>();
+
     @Transient
     public final String str = "SEC";
 
+    @Transient
+    public static SeanceRecap getSeanceRecap (List<Seance> seances){
+        SeanceRecap recap = new SeanceRecap();
+        if (seances == null || seances.isEmpty()) {
+            recap.setTotalSeance(0);
+            recap.setTotalReservation(0);
+            recap.setChiffreAffaire(0.0);
+            return recap;
+        }
+
+        int totalTicket = 0;
+        double totalChiffre = 0.0;
+        for (Seance seance : seances) {
+            if (seance == null || seance.getTickets() == null) {
+                continue;
+            }
+            for (Ticket ticket : seance.getTickets()) {
+                if (ticket == null) {
+                    continue;
+                }
+                totalTicket++;
+                if (ticket.getPlace() != null && ticket.getPlace().getPrixPlace() != null) {
+                    totalChiffre += ticket.getPlace().getPrixPlace();
+                }
+            }
+        }
+        recap.setTotalSeance(seances.size());
+        recap.setChiffreAffaire(totalChiffre);
+        recap.setTotalReservation(totalTicket);
+
+
+        return recap;
+    }
     @Transient
     public String getStrId() {
         return str + idSeance;

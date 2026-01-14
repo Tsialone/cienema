@@ -4,6 +4,7 @@ import com.cinema.dev.models.Seance;
 import com.cinema.dev.views.SeanceDetail;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,13 +21,15 @@ public interface SeanceRepository extends JpaRepository<Seance, Long>, JpaSpecif
            "JOIN film f ON s.id_film = f.id_film " +
            "WHERE (CAST(:debut AS date) IS NULL OR DATE(s.date_time_debut) = CAST(:debut AS date)) " +
            "AND (CAST(:idSalle AS bigint) IS NULL OR s.id_salle = :idSalle) " +
-           "AND (CAST(:idFilm AS bigint) IS NULL OR s.id_film = :idFilm)")
+           "AND (CAST(:idFilm AS bigint) IS NULL OR s.id_film = :idFilm) " +
+           "AND (CAST(:heure AS time) IS NULL OR TO_CHAR(s.date_time_debut, 'HH24:MI') = TO_CHAR(CAST(:heure AS time), 'HH24:MI'))")
     List<Object[]> filterByRaw(@Param("debut") LocalDate debut, 
                                 @Param("idSalle") Long idSalle, 
-                                @Param("idFilm") Long idFilm);
+                                @Param("idFilm") Long idFilm,
+                                @Param("heure") LocalTime heure);
 
-    default List<SeanceDetail> filterBy(LocalDate debut, Long idSalle, Long idFilm) {
-        return filterByRaw(debut, idSalle, idFilm).stream()
+    default List<SeanceDetail> filterBy(LocalDate debut, Long idSalle, Long idFilm, LocalTime heure) {
+        return filterByRaw(debut, idSalle, idFilm, heure).stream()
             .map(row -> new SeanceDetail(
                 String.valueOf(row[0]),
                 String.valueOf(row[1]),

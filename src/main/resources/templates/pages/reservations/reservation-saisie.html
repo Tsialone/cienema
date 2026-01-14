@@ -37,12 +37,17 @@
 
                     <div class="col-md-6">
                         <label for="idClient" class="form-label">Client <span class="text-danger">*</span></label>
-                        <select class="form-select" id="idClient" name="idClient" required>
-                            <option value="">-- Sélectionner un client --</option>
-                            <option th:each="client : ${clients}" th:value="${client.idClient}"
-                                th:text="${client.getStrId() + ' - ' + client.nom}">
-                            </option>
-                        </select>
+                        <div class="input-group">
+                            <select class="form-select" id="idClient" name="idClient" required>
+                                <option value="">-- Sélectionner un client --</option>
+                                <option th:each="client : ${clients}" th:value="${client.idClient}"
+                                    th:text="${client.getStrId() + ' - ' + client.nom}">
+                                </option>
+                            </select>
+                            <a class="btn btn-outline-primary" th:href="@{/clients/saisie}" title="Ajouter un client">
+                                <i class="bi bi-plus"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="col-12" th:if="${places != null && !places.isEmpty()}">

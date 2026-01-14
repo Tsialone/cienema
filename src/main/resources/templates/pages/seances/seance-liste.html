@@ -5,6 +5,33 @@
         </div>
 
         <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                    <div class="card border-primary h-100">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Total Séances</p>
+                            <h4 class="mb-0" th:text="${seanceRecap != null ? seanceRecap.totalSeance : 0}">0</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                    <div class="card border-success h-100">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Total Réservations</p>
+                            <h4 class="mb-0" th:text="${seanceRecap != null ? seanceRecap.totalReservation : 0}">0</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-warning h-100">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Chiffre d'Affaires</p>
+                            <h4 class="mb-0" th:text="${seanceRecap != null ? #numbers.formatDecimal(seanceRecap.chiffreAffaire,1,'COMMA',2,'POINT') : '0.00'}">0.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
             <form th:action="@{/seances/liste}" method="get" class="mb-4">
                 <div class="row g-3">
                     <div class="col-md-3">
@@ -30,6 +57,10 @@
                     <div class="col-md-3">
                         <label for="debut" class="form-label">Date</label>
                         <input type="date" class="form-control" id="debut" name="debut">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="debut" class="form-label">Heure</label>
+                        <input type="time" class="form-control" id="heure" name="heure" th:value="${param.heure}">
                     </div>
                 </div>
                 <div class="row mt-3">
