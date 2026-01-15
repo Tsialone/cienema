@@ -64,12 +64,12 @@ public class Salle {
     @Transient
     public Double getMaxPrixPlace(LocalDateTime dateTime) {
         Double maxPrix = 0.0;
-        System.out.println("------------salle:" + this.getStrId()  );
+        // System.out.println("------------salle:" + this.getStrId()  );
         for (Place place : places) {
             Double prixPlace = place.getPrixPlace(dateTime);
             if (prixPlace != null) {
                 maxPrix += prixPlace;
-                System.out.println("place" + place.getStrId() + " prix: "  + prixPlace );
+                // System.out.println("place" + place.getStrId() + " prix: "  + prixPlace );
             }
         }
         // System.out.println("salle:" + this.getStrId() + " total: "  + maxPrix  );

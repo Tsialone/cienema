@@ -134,7 +134,7 @@ INSERT INTO categorie_p(libelle, prix_defaut) VALUES
 ('VIP', 100000.00);
 
 INSERT INTO prix_c(created, prix, id_cp) VALUES 
-(NOW(), 20000.00, 1),
+(NOW(), 122.00, 1),
 (NOW(), 50000.00, 2),
 (NOW(), 100000.00, 3);
 

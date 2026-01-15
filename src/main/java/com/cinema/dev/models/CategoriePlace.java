@@ -70,6 +70,7 @@ public class CategoriePlace {
         if (prixCs == null || prixCs.isEmpty() || dateTime == null) {
             return this.getPrixDefaut();
         }
+        // System.out.println("prixCs size: " + prixCs.size() + " dateTime: " + dateTime);
         return prixCs.stream()
                 .filter(p -> p.getCreated().isBefore(dateTime) || p.getCreated().isEqual(dateTime))
                 .max((p1, p2) -> p1.getCreated().compareTo(p2.getCreated()))

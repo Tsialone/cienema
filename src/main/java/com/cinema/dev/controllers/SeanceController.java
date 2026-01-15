@@ -34,7 +34,7 @@ public class SeanceController {
     public String getListe(Model model,
             @RequestParam(required = false) LocalDate debut,
             @RequestParam(required = false) Long idSalle,
-            @RequestParam(required = false) Long idFilm ,
+            @RequestParam(required = false) Long idFilm,
             @RequestParam(required = false) String heure) {
         LocalTime timeFilter = null;
         if (heure != null && !heure.isEmpty()) {
@@ -49,10 +49,10 @@ public class SeanceController {
         }
         for (SeanceDetail detail : seances) {
             Seance seance = seanceRepository.findById(Long.valueOf(detail.getIdSeance())).orElse(null);
-            if (seance != null){
-                detail.setMaxRevenu(seance.getMaxRevenu(dateTimeFilter));
-                seanceEntities.add(seance);
-            }
+            // if (seance != null){
+            // detail.setMaxRevenu(seance.getMaxRevenu(dateTimeFilter));
+            seanceEntities.add(seance);
+            // }
         }
         SeanceRecap recap = Seance.getSeanceRecap(seanceEntities);
 
