@@ -1,6 +1,7 @@
 package com.cinema.dev.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class Caisse {
     private String nom;
 
     @OneToMany(mappedBy = "caisse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<MouvementCaisse> mouvements = new ArrayList<>();
 
     @Transient

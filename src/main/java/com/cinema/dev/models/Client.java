@@ -25,13 +25,12 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClient;
 
+    @Column(name = "nom", nullable = false)
+    private String nom;
+
     @ManyToOne
     @JoinColumn(name = "id_genre", nullable = false)
     private Genre genre;
-
-    @OneToOne
-    @JoinColumn(name = "id_utilisateur", nullable = false, unique = true)
-    private Utilisateur utilisateur;
 
     @Transient
     public static List<Client> getAll (ClientRepository clientRepository) {

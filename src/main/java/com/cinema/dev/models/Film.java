@@ -32,6 +32,17 @@ public class Film {
     @Column(name = "duree", nullable = false)
     private LocalTime duree;
 
+    @OneToMany(mappedBy = "film")
+    private List<Seance> seances;
+
+    @Transient
+    public final String str = "FLM";
+
+    @Transient
+    public String getStrId() {
+        return str + idFilm;
+    }
+
     @Transient
     public static List<Film> getAll(FilmRepository filmRepository) {
         return filmRepository.findAll();
