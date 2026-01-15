@@ -38,7 +38,8 @@ public interface SeanceRepository extends JpaRepository<Seance, Long>, JpaSpecif
                 String.valueOf(row[4]),
                 (String) row[5],
                 String.valueOf(row[6]),
-                (String) row[7]
+                (String) row[7],
+                0.0
             ))
             .toList();
     }

@@ -1,6 +1,7 @@
 package com.cinema.dev.controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +43,16 @@ public class SeanceController {
 
         List<SeanceDetail> seances = seanceRepository.filterBy(debut, idSalle, idFilm, timeFilter);
         List<Seance> seanceEntities = new ArrayList<>();
+        LocalDateTime dateTimeFilter = null;
+        if (debut != null && timeFilter != null) {
+            dateTimeFilter = LocalDateTime.of(debut, timeFilter);
+        }
         for (SeanceDetail detail : seances) {
-            seanceRepository.findById(Long.valueOf(detail.getIdSeance()))
-                    .ifPresent(seanceEntities::add);
+            Seance seance = seanceRepository.findById(Long.valueOf(detail.getIdSeance())).orElse(null);
+            if (seance != null){
+                detail.setMaxRevenu(seance.getMaxRevenu(dateTimeFilter));
+                seanceEntities.add(seance);
+            }
         }
         SeanceRecap recap = Seance.getSeanceRecap(seanceEntities);
 

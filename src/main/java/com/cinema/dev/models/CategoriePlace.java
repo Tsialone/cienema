@@ -9,6 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,14 @@ public class CategoriePlace {
     @Column(name = "libelle", length = 50)
     private String libelle;
 
-    @Column(name = "prix", nullable = false)
-    private BigDecimal prix;
+    @Column(name = "prix_defaut", nullable = false)
+    private BigDecimal prixDefaut;
 
     @OneToMany(mappedBy = "categoriePlace")
     private List<Place> places = new ArrayList<>();
+
+    @OneToMany(mappedBy = "categoriePlace")
+    private List<CategoriePrix> categoriePrix = new ArrayList<>();
 
     @Transient
     public final String str = "CAT";
@@ -48,5 +52,28 @@ public class CategoriePlace {
     @Transient
     public static List<CategoriePlace> getAll(CategoriePlaceRepository categoriePlaceRepository) {
         return categoriePlaceRepository.findAll();
+    }
+
+    @Transient
+    public BigDecimal getPrixRecent() {
+        if (categoriePrix == null || categoriePrix.isEmpty()) {
+            return null;
+        }
+        return categoriePrix.stream()
+                .max((cp1, cp2) -> cp1.getCreated().compareTo(cp2.getCreated()))
+                .map(CategoriePrix::getPrix)
+                .orElse(this.getPrixDefaut());
+    }
+
+    @Transient
+    public BigDecimal getPrixByDateTime(LocalDateTime dateTime) {
+        if (categoriePrix == null || categoriePrix.isEmpty() || dateTime == null) {
+            return null;
+        }
+        return categoriePrix.stream()
+                .filter(cp -> cp.getCreated().isBefore(dateTime) || cp.getCreated().isEqual(dateTime))
+                .max((cp1, cp2) -> cp1.getCreated().compareTo(cp2.getCreated()))
+                .map(CategoriePrix::getPrix)
+                .orElse(this.getPrixDefaut());
     }
 }

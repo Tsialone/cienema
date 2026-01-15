@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cinema.dev.models.Place;
 import com.cinema.dev.models.Reservation;
 import com.cinema.dev.models.Salle;
 import com.cinema.dev.models.Ticket;
@@ -53,15 +54,19 @@ public class ReservationController {
             @RequestParam(required = true) Long idSalle,
             @RequestParam(required = true) String heure,
             @RequestParam(required = true) Long idFilm,
-            @RequestParam(required = true) Long idSeance
-        ) {
+            @RequestParam(required = true) Long idSeance) {
 
         LocalDateTime dateTime = LocalDateTime.parse(dateSeance + "T" + heure);
 
         if (idSalle != null) {
             Salle salle = salleRepository.findById(idSalle).orElse(null);
             model.addAttribute("salle", salle);
-            model.addAttribute("places", salle.getPlaceDispo(dateTime, ticketRepository));
+            List<Place> places = salle.getPlaceDispo(dateTime, ticketRepository);
+            for (Place place : places) {
+                place.setPrixPlace(place.getPrixPlace(dateTime));
+            }
+
+            model.addAttribute("places", places);
         }
 
         if (idFilm != null) {
@@ -89,7 +94,7 @@ public class ReservationController {
         try {
             form.control();
             Reservation.save(form, reservationRepository, placeRepository, ticketRepository, clientRepository,
-                    filmRepository, seanceRepository , paiementRepository , mouvementCaisseRepository , caisseRepository);
+                    filmRepository, seanceRepository, paiementRepository, mouvementCaisseRepository, caisseRepository);
             return "redirect:/reservations/liste";
         } catch (Exception e) {
             rd.addFlashAttribute("toastMessage", e.getMessage());

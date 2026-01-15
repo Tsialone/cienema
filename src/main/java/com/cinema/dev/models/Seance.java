@@ -47,7 +47,7 @@ public class Seance {
     public final String str = "SEC";
 
     @Transient
-    public static SeanceRecap getSeanceRecap (List<Seance> seances){
+    public static SeanceRecap getSeanceRecap(List<Seance> seances) {
         SeanceRecap recap = new SeanceRecap();
         if (seances == null || seances.isEmpty()) {
             recap.setTotalSeance(0);
@@ -76,24 +76,47 @@ public class Seance {
         recap.setChiffreAffaire(totalChiffre);
         recap.setTotalReservation(totalTicket);
 
-
         return recap;
     }
+
+    @Transient
+    public Double getMaxRevenu() {
+
+        if (getSalle() != null) {
+            return getSalle().getMaxPrixPlace();
+        }
+
+        return 0.0;
+
+    }
+
+    @Transient
+    public Double getMaxRevenu(LocalDateTime dateTime) {
+
+        if (getSalle() != null) {
+            return getSalle().getMaxPrixPlace(dateTime);
+        }
+
+        return 0.0;
+
+    }
+
     @Transient
     public String getStrId() {
         return str + idSeance;
     }
 
     @Transient
-    public LocalDateTime getDateFinPrevue (){
-        return this.dateTimeDebut.plusMinutes(this.film.getDuree().getHour()*60 + this.film.getDuree().getMinute());
+    public LocalDateTime getDateFinPrevue() {
+        return this.dateTimeDebut.plusMinutes(this.film.getDuree().getHour() * 60 + this.film.getDuree().getMinute());
     }
 
     @Transient
-    public static  List<SeanceDetail> getSeanceDetail (LocalDateTime debut , LocalDateTime fin  , Long idSalle , Long idFilm ){
-        
+    public static List<SeanceDetail> getSeanceDetail(LocalDateTime debut, LocalDateTime fin, Long idSalle,
+            Long idFilm) {
+
         return List.of();
-        
+
     }
 
 }

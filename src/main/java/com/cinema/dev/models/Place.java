@@ -41,6 +41,9 @@ public class Place {
     private Salle salle;
 
     @Transient
+    private Double prixPlace;
+
+    @Transient
     public static Place getByNumeroPlace(PlaceRepository placeRepository, Long numero) {
         return placeRepository.findByNumero(numero);
     }
@@ -53,9 +56,15 @@ public class Place {
         return str + idPlace;
     }
 
+    // @Transient
+    // public Double getPrixPlace() {
+    //     return this.categoriePlace.getPrixRecent().doubleValue();
+    // }
+
     @Transient
-    public Double getPrixPlace() {
-        return this.categoriePlace.getPrix().doubleValue();
+    public Double getPrixPlace(LocalDateTime dateTime) {
+        java.math.BigDecimal prix = this.categoriePlace.getPrixByDateTime(dateTime);
+        return prix != null ? prix.doubleValue() : this.getCategoriePlace().getPrixDefaut().doubleValue();
     }
 
     @Transient
@@ -74,7 +83,8 @@ public class Place {
             // return false;
             // }
 
-            if (this.idPlace.equals(ticket.getPlace().getIdPlace()) && DateUtils.isConflit(debut, fin, dateTime, dateTimeFin)) {
+            if (this.idPlace.equals(ticket.getPlace().getIdPlace())
+                    && DateUtils.isConflit(debut, fin, dateTime, dateTimeFin)) {
                 return false;
             }
             if (this.idPlace.equals(ticket.getPlace().getIdPlace())) {

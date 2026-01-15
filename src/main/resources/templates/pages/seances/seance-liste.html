@@ -17,7 +17,7 @@
                 <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                     <div class="card border-success h-100">
                         <div class="card-body">
-                            <p class="text-muted mb-1">Total Réservations</p>
+                            <p class="text-muted mb-1">Total Ticket vendue</p>
                             <h4 class="mb-0" th:text="${seanceRecap != null ? seanceRecap.totalReservation : 0}">0</h4>
                         </div>
                     </div>
@@ -85,6 +85,7 @@
                             <th>Salle</th>
                             <th>Film</th>
                             <th>Durée</th>
+                            <th>Max revenu</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -96,6 +97,7 @@
                             <td th:text="${seance.salleNom}"></td>
                             <td th:text="${seance.filmNom}"></td>
                             <td th:text="${seance.filmDuree}"></td>
+                            <td th:text="${seance.maxRevenu}"></td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-link" type="button" data-bs-toggle="dropdown">

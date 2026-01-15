@@ -50,6 +50,33 @@ public class Salle {
     private List<Seance> seances;
 
     @Transient
+    public Double getMaxPrixPlace() {
+        Double maxPrix = 0.0;
+        System.out.println("------------salle:" + this.getStrId()  );
+        for (Place place : places) {
+            maxPrix+=place.getPrixPlace();
+            System.out.println("place" + place.getStrId() + " prix: "  + place.getPrixPlace() );
+        }
+        // System.out.println("salle:" + this.getStrId() + " total: "  + maxPrix  );
+        return maxPrix;
+    }
+
+    @Transient
+    public Double getMaxPrixPlace(LocalDateTime dateTime) {
+        Double maxPrix = 0.0;
+        System.out.println("------------salle:" + this.getStrId()  );
+        for (Place place : places) {
+            Double prixPlace = place.getPrixPlace(dateTime);
+            if (prixPlace != null) {
+                maxPrix += prixPlace;
+                System.out.println("place" + place.getStrId() + " prix: "  + prixPlace );
+            }
+        }
+        // System.out.println("salle:" + this.getStrId() + " total: "  + maxPrix  );
+        return maxPrix;
+    }
+
+    @Transient
     public List<Place> getPlaceDispo(LocalDateTime date , TicketRepository ticketRepository) {
 
         List<Place> dispoPlaces = new ArrayList<>();
