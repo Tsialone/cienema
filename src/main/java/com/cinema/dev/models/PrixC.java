@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,10 @@ public class PrixC {
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
 
-    @OneToMany(mappedBy = "prixC")
-    private List<CategoriePrix> categoriePrix = new ArrayList<>();
+    @Column(name = "prix", nullable = false)
+    private BigDecimal prix;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cp", nullable = false)
+    private CategoriePlace categoriePlace;
 }
