@@ -39,7 +39,7 @@ public class CategoriePlace {
     private List<Place> places = new ArrayList<>();
 
     @OneToMany(mappedBy = "categoriePlace")
-    private List<CategoriePrix> categoriePrix = new ArrayList<>();
+    private List<PrixC> prixCs = new ArrayList<>();
 
     @Transient
     public final String str = "CAT";
@@ -56,24 +56,24 @@ public class CategoriePlace {
 
     @Transient
     public BigDecimal getPrixRecent() {
-        if (categoriePrix == null || categoriePrix.isEmpty()) {
-            return null;
+        if (prixCs == null || prixCs.isEmpty()) {
+            return this.getPrixDefaut();
         }
-        return categoriePrix.stream()
-                .max((cp1, cp2) -> cp1.getCreated().compareTo(cp2.getCreated()))
-                .map(CategoriePrix::getPrix)
+        return prixCs.stream()
+                .max((p1, p2) -> p1.getCreated().compareTo(p2.getCreated()))
+                .map(PrixC::getPrix)
                 .orElse(this.getPrixDefaut());
     }
 
     @Transient
     public BigDecimal getPrixByDateTime(LocalDateTime dateTime) {
-        if (categoriePrix == null || categoriePrix.isEmpty() || dateTime == null) {
-            return null;
+        if (prixCs == null || prixCs.isEmpty() || dateTime == null) {
+            return this.getPrixDefaut();
         }
-        return categoriePrix.stream()
-                .filter(cp -> cp.getCreated().isBefore(dateTime) || cp.getCreated().isEqual(dateTime))
-                .max((cp1, cp2) -> cp1.getCreated().compareTo(cp2.getCreated()))
-                .map(CategoriePrix::getPrix)
+        return prixCs.stream()
+                .filter(p -> p.getCreated().isBefore(dateTime) || p.getCreated().isEqual(dateTime))
+                .max((p1, p2) -> p1.getCreated().compareTo(p2.getCreated()))
+                .map(PrixC::getPrix)
                 .orElse(this.getPrixDefaut());
     }
 }
