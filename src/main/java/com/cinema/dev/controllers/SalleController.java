@@ -51,7 +51,7 @@ public class SalleController {
         for (Salle salle : salles) {
             SalleDetail detail = new SalleDetail();
             detail.setIdSalle(String.valueOf(salle.getIdSalle()));
-            detail.setCapacite(String.valueOf(salle.getCapacite()));
+            detail.setCapacite(String.valueOf(salle.getCapaciteMax()));
             // System.out.println("dateTimeFilter: " + dateTimeFilter);
             detail.setRevenuMax(String.valueOf(salle.getMaxPrixPlace(dateTimeFilter)));
             salleDetails.add(detail);
