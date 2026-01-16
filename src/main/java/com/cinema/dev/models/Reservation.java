@@ -101,7 +101,8 @@ public class Reservation {
         }
         // reservation.setTickets(tickets);
         for (Ticket ticket : tickets) {
-            ticket.payer(ticket.getPlace().getPrixPlace(), 1l, paiementRepository, mouvementCaisseRepository, caisseRepository);
+            Double montant = ticket.getPlace().getPrixPlace(reservation.getDateReservation());
+            ticket.payer(montant, 1l, paiementRepository, mouvementCaisseRepository, caisseRepository);
         }
         
         return reservation;
