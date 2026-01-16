@@ -50,12 +50,17 @@ public class Salle {
     private List<Seance> seances;
 
     @Transient
+    public Integer getCapaciteMax () {
+        return places != null ? places.size() : 0;
+    }
+
+    @Transient
     public Double getMaxPrixPlace() {
         Double maxPrix = 0.0;
-        System.out.println("------------salle:" + this.getStrId()  );
+        // System.out.println("------------salle:" + this.getStrId()  );
         for (Place place : places) {
             maxPrix+=place.getPrixPlace();
-            System.out.println("place" + place.getStrId() + " prix: "  + place.getPrixPlace() );
+            // System.out.println("place" + place.getStrId() + " prix: "  + place.getPrixPlace() );
         }
         // System.out.println("salle:" + this.getStrId() + " total: "  + maxPrix  );
         return maxPrix;
@@ -64,13 +69,13 @@ public class Salle {
     @Transient
     public Double getMaxPrixPlace(LocalDateTime dateTime) {
         Double maxPrix = 0.0;
-        System.out.println("------------salle:" + this.getStrId()  );
+        // System.out.println("------------salle:" + this.getStrId()  );
         for (Place place : places) {
             Double prixPlace = place.getPrixPlace(dateTime);
-            if (prixPlace != null) {
+            // if (prixPlace != null) {
                 maxPrix += prixPlace;
-                System.out.println("place" + place.getStrId() + " prix: "  + prixPlace );
-            }
+                // System.out.println("place" + place.getStrId() + " prix: "  + prixPlace );
+            // }
         }
         // System.out.println("salle:" + this.getStrId() + " total: "  + maxPrix  );
         return maxPrix;
@@ -80,7 +85,7 @@ public class Salle {
     public List<Place> getPlaceDispo(LocalDateTime date , TicketRepository ticketRepository) {
 
         List<Place> dispoPlaces = new ArrayList<>();
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        // System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         for (Place place : this.places) {
             if (place.isDispo(date, ticketRepository)) {
                 dispoPlaces.add(place);

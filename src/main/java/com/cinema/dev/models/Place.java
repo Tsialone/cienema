@@ -1,5 +1,6 @@
 package com.cinema.dev.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,7 +64,8 @@ public class Place {
 
     @Transient
     public Double getPrixPlace(LocalDateTime dateTime) {
-        java.math.BigDecimal prix = this.categoriePlace.getPrixByDateTime(dateTime);
+        BigDecimal prix = this.categoriePlace.getPrixByDateTime(dateTime);
+        // System.out.println("null ve: " + prix);
         return prix != null ? prix.doubleValue() : this.getCategoriePlace().getPrixDefaut().doubleValue();
     }
 

@@ -27,10 +27,10 @@
                         </li>
                     </ul>
 
-                    
+
                 </li>
 
-                 <li class="sidebar-item  has-sub">
+                <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-hexagon-fill"></i>
                         <span>Reservation</span>
@@ -41,8 +41,39 @@
                         </li>
                     </ul>
 
-                    
+
                 </li>
+
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-hexagon-fill"></i>
+                        <span>Salle</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a th:href="@{/salles/liste}">Liste</a>
+                        </li>
+                    </ul>
+
+
+                </li>
+
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-hexagon-fill"></i>
+                        <span>Clients</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a th:href="@{/clients/liste}">Liste</a>
+                            <a th:href="@{/clients/saisie}">Saisie</a>
+                        </li>
+                    </ul>
+
+             
+
+                </li>
+
 
 
             </ul>
