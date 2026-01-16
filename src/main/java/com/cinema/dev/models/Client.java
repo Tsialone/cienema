@@ -29,8 +29,8 @@ public class Client {
     private String nom;
 
     @ManyToOne
-    @JoinColumn(name = "id_genre", nullable = false)
-    private Genre genre;
+    @JoinColumn(name = "id_categorie", nullable = false)
+    private Categorie categorie;
 
     @Transient
     public static List<Client> getAll (ClientRepository clientRepository) {

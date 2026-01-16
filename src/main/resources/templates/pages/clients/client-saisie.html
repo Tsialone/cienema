@@ -14,12 +14,12 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="idGenre" class="form-label">Genre <span class="text-danger">*</span></label>
-                        <select class="form-select" id="idGenre" name="idGenre" required>
-                            <option value="">-- Sélectionner un genre --</option>
-                            <option th:each="genre : ${genres}" 
-                                    th:value="${genre.idGenre}"
-                                    th:text="${genre.libelle}">
+                        <label for="idCategorie" class="form-label">Catégorie <span class="text-danger">*</span></label>
+                        <select class="form-select" id="idCategorie" name="idCategorie" required>
+                            <option value="">-- Sélectionner une catégorie --</option>
+                            <option th:each="categorie : ${categories}" 
+                                    th:value="${categorie.idCategorie}"
+                                    th:text="${categorie.libelle}">
                             </option>
                         </select>
                     </div>

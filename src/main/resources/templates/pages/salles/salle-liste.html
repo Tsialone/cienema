@@ -33,18 +33,21 @@
                         <tr>
                             <th>ID Salle</th>
                             <th>Capacité</th>
-                            <th>Revenu Max</th>
+                            <th>Revenu Estime</th>
+                            <th>Revenu Reel</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:if="${salles.isEmpty()}">
-                            <td colspan="4" class="text-center">Aucune salle trouvée</td>
+                            <td colspan="5" class="text-center">Aucune salle trouvée</td>
                         </tr>
                         <tr th:each="salle : ${salles}">
                             <td th:text="'SAL' + ${salle.idSalle}"></td>
                             <td th:text="${salle.capacite}"></td>
                             <td th:text="${salle.revenuMax}"></td>
+                            <td th:text="${salle.revenuActuel}"></td>
+
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-link" type="button" data-bs-toggle="dropdown">

@@ -53,7 +53,21 @@ public class Salle {
     public Integer getCapaciteMax () {
         return places != null ? places.size() : 0;
     }
+    @Transient
+    public Double getCa (LocalDateTime date){
+        Double resp = 0.0;
+        for (Seance seance : seances) {
+            for (Ticket ticket : seance.getTickets()) {
+                for (Paiement paiement : ticket.getPaiements()) {
+                    if (paiement.getCreated().isBefore(date) || paiement.getCreated().isEqual(date)) {
+                        resp += paiement.getMontant().doubleValue();
+                    }
+                }
+            }   
+        }
+        return resp;
 
+    }
     @Transient
     public Double getMaxPrixPlace() {
         Double maxPrix = 0.0;

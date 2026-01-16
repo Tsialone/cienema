@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cinema.dev.repositories.CategHeritRepository;
 import com.cinema.dev.repositories.CategoriePlaceRepository;
 
 @Entity
@@ -41,6 +42,9 @@ public class CategoriePlace {
     @OneToMany(mappedBy = "categoriePlace")
     private List<PrixC> prixCs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "categoriePlace")
+    private List<Remise> remises = new ArrayList<>();
+
     @Transient
     public final String str = "CAT";
 
@@ -48,6 +52,11 @@ public class CategoriePlace {
     public String getStrId() {
         return str + idCp;
     }
+
+   
+
+    // 
+  
 
     @Transient
     public static List<CategoriePlace> getAll(CategoriePlaceRepository categoriePlaceRepository) {
@@ -70,7 +79,8 @@ public class CategoriePlace {
         if (prixCs == null || prixCs.isEmpty() || dateTime == null) {
             return this.getPrixDefaut();
         }
-        // System.out.println("prixCs size: " + prixCs.size() + " dateTime: " + dateTime);
+        // System.out.println("prixCs size: " + prixCs.size() + " dateTime: " +
+        // dateTime);
         return prixCs.stream()
                 .filter(p -> p.getCreated().isBefore(dateTime) || p.getCreated().isEqual(dateTime))
                 .max((p1, p2) -> p1.getCreated().compareTo(p2.getCreated()))

@@ -16,11 +16,13 @@ import org.aspectj.apache.bcel.generic.InstructionConstants.Clinit;
 
 import com.cinema.dev.forms.ReservationForm;
 import com.cinema.dev.repositories.CaisseRepository;
+import com.cinema.dev.repositories.CategHeritRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
 import com.cinema.dev.repositories.PaiementRepository;
 import com.cinema.dev.repositories.PlaceRepository;
+import com.cinema.dev.repositories.RemiseRepository;
 import com.cinema.dev.repositories.ReservationRepository;
 import com.cinema.dev.repositories.SeanceRepository;
 import com.cinema.dev.repositories.TicketRepository;
@@ -54,13 +56,21 @@ public class Reservation {
         return str + idReservation;
     }
     @Transient
-    public Double getMontant (){
+    public Double montant ;
+    @Transient
+    public Double getMontantTotal (RemiseRepository remiseRepository){
         if (this.tickets == null || this.tickets.size() ==0){
             return 0.0;
         }
         Double total = 0.0;
-        for (Ticket ticket : this.tickets) {
-            total += ticket.getPlace().getPrixPlace();
+       for (Ticket ticket : tickets) {
+            Remise remise = Remise.getRemiseByIdCategPlaceClientByDateTime(ticket.getPlace().getCategoriePlace().getIdCp(), ticket.getClient().getCategorie().getIdCategorie(),  this.getDateReservation(), remiseRepository).orElse(null);
+            
+            Double montant = ticket.getPlace().getPrixPlace(this.getDateReservation());
+            if (remise != null) {
+                // montant =  remise.getMontant().doubleValue();
+            }
+            total += montant;
         }
         return total;
     }
@@ -80,7 +90,7 @@ public class Reservation {
     }
     @Transient
     @Transactional
-    public static Reservation save (ReservationForm reservationForm , ReservationRepository reservationRepository , PlaceRepository placeRepository  , TicketRepository ticketRepository , ClientRepository clientRepository , FilmRepository filmRepository , SeanceRepository seanceRepository , PaiementRepository paiementRepository , MouvementCaisseRepository mouvementCaisseRepository , CaisseRepository caisseRepository) throws Exception {
+    public static Reservation save (ReservationForm reservationForm , ReservationRepository reservationRepository , PlaceRepository placeRepository  , TicketRepository ticketRepository , ClientRepository clientRepository , FilmRepository filmRepository , SeanceRepository seanceRepository , PaiementRepository paiementRepository , MouvementCaisseRepository mouvementCaisseRepository , CaisseRepository caisseRepository , RemiseRepository remiseRepository , CategHeritRepository categHeritRepository) throws Exception {
         Reservation reservation= new Reservation();
         reservation.setDateReservation(LocalDateTime.now());
         reservation = reservationRepository.save(reservation);
@@ -101,7 +111,14 @@ public class Reservation {
         }
         // reservation.setTickets(tickets);
         for (Ticket ticket : tickets) {
-            Double montant = ticket.getPlace().getPrixPlace(reservation.getDateReservation());
+            Long idcl = ticket.getClient().getIdClient();
+            LocalDateTime dateReservation = reservation.getDateReservation();   
+            Categorie him = ticket.getClient().getCategorie();
+
+            
+            Double montant =  him.getRealPrix(idcl,  dateReservation  , categHeritRepository, remiseRepository);
+            // Double montant = parent != null ? enfant.(reservation.getDateReservation()) - (enfant.getPrixPlace(reservation.getDateReservation()) * parent.getPourcentage(CategHeritRepository).doubleValue() / 100) : enfant.getPrixPlace(reservation.getDateReservation());
+          
             ticket.payer(montant, 1l, paiementRepository, mouvementCaisseRepository, caisseRepository);
         }
         

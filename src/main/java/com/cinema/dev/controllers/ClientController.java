@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.cinema.dev.forms.ClientForm;
 import com.cinema.dev.models.Client;
 import com.cinema.dev.repositories.ClientRepository;
-import com.cinema.dev.repositories.GenreRepository;
+import com.cinema.dev.repositories.CategorieRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,11 +20,11 @@ import lombok.RequiredArgsConstructor;
 public class ClientController {
 
     private final ClientRepository clientRepository;
-    private final GenreRepository genreRepository;
+    private final CategorieRepository categorieRepository;
 
     @GetMapping("/saisie")
     public String getSaisie(Model model) {
-        model.addAttribute("genres", genreRepository.findAll());
+        model.addAttribute("categories", categorieRepository.findAll());
         model.addAttribute("content", "pages/clients/client-saisie");
         return "admin-layout";
     }
@@ -36,8 +36,8 @@ public class ClientController {
             
             Client client = new Client();
             client.setNom(form.getNom());
-            client.setGenre(genreRepository.findById(form.getIdGenre())
-                    .orElseThrow(() -> new Exception("Genre non trouvé")));
+            client.setCategorie(categorieRepository.findById(form.getIdCategorie())
+                    .orElseThrow(() -> new Exception("Catégorie non trouvée")));
             
             clientRepository.save(client);
             
