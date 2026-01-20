@@ -103,7 +103,20 @@ public class Salle {
         for (Place place : this.places) {
             if (place.isDispo(date, ticketRepository)) {
                 dispoPlaces.add(place);
-                
+            }
+            
+        }
+        return  dispoPlaces;
+    }
+
+     @Transient
+    public List<Place> getPlaceDispo(LocalDateTime date  , Long idCategoriePlace  , TicketRepository ticketRepository) {
+
+        List<Place> dispoPlaces = new ArrayList<>();
+        // System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (Place place : this.places) {
+            if (place.isDispo(date, ticketRepository)  && place.getCategoriePlace().getIdCp().equals(idCategoriePlace)) {
+                dispoPlaces.add(place);
             }
             
         }

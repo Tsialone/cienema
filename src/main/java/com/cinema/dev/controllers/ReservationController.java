@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cinema.dev.models.CategHerit;
+import com.cinema.dev.models.CategoriePlace;
 import com.cinema.dev.models.Place;
 import com.cinema.dev.models.Remise;
 import com.cinema.dev.models.Reservation;
@@ -22,6 +23,7 @@ import com.cinema.dev.models.Salle;
 import com.cinema.dev.models.Ticket;
 import com.cinema.dev.repositories.CaisseRepository;
 import com.cinema.dev.repositories.CategHeritRepository;
+import com.cinema.dev.repositories.CategoriePlaceRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
@@ -53,6 +55,7 @@ public class ReservationController {
     private final CaisseRepository caisseRepository;
     private final RemiseRepository remiseRepository;
     private final CategHeritRepository  categHeritRepository;
+    private final CategoriePlaceRepository categoriePlaceRepository;
 
     @GetMapping("/saisie")
     public String getSaisie(Model model,
@@ -80,6 +83,7 @@ public class ReservationController {
         }
 
         model.addAttribute("clients", clientRepository.findAll());
+        model.addAttribute("categoriePlaces", categoriePlaceRepository.findAll());
         model.addAttribute("heure", heure);
         model.addAttribute("idSeance", idSeance);
         model.addAttribute("dateSeance", LocalDate.parse(dateSeance, DateTimeFormatter.ISO_DATE));
@@ -105,7 +109,7 @@ public class ReservationController {
         try {
             form.control();
             Reservation.save(form, reservationRepository, placeRepository, ticketRepository, clientRepository,
-                    filmRepository, seanceRepository, paiementRepository, mouvementCaisseRepository, caisseRepository , remiseRepository, categHeritRepository );
+                    filmRepository, seanceRepository, paiementRepository, mouvementCaisseRepository, caisseRepository , remiseRepository, categHeritRepository  , salleRepository );
             return "redirect:/reservations/liste";
         } catch (Exception e) {
             rd.addFlashAttribute("toastMessage", e.getMessage());

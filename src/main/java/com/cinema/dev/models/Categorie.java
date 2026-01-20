@@ -83,9 +83,10 @@ public class Categorie {
         Double pourcentage = this.getPourcentage(categHeritRepository);
         Categorie parent = this.getParent(categHeritRepository);
         if (parent != null) {
-            montant =  Remise.getRemiseByIdCategPlaceClientByDateTime(parent.getIdCategorie(), idClient , date  ,remiseRepository).orElse(null).getMontant().doubleValue();
-            
-            montant+=  montant / pourcentage;
+            Remise remise = Remise.getRemiseByIdCategPlaceClientByDateTime(parent.getIdCategorie(), idClient , date  ,remiseRepository).orElse(null);
+            if (remise != null){
+                montant+=  montant / pourcentage;
+            }
         }
         return montant;
 
