@@ -17,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cinema.dev.forms.TicketForm;
 import com.cinema.dev.repositories.PlaceRepository;
+import com.cinema.dev.repositories.RemiseRepository;
 import com.cinema.dev.repositories.TicketRepository;
 import com.cinema.dev.views.TicketFiche;
 import com.cinema.dev.repositories.CaisseRepository;
+import com.cinema.dev.repositories.CategHeritRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
@@ -78,6 +80,17 @@ public class Ticket {
     }
 
     @Transient
+    public Double getMontant(CategHeritRepository categHeritRepository , RemiseRepository remiseRepository) {
+        Long idcl = this.getClient().getIdClient();
+        LocalDateTime dateReservation = reservation.getDateReservation();
+        Categorie him = this.getClient().getCategorie();
+
+        Double montant = him.getRealPrix(idcl, dateReservation, categHeritRepository, remiseRepository);
+
+        return montant;
+    }
+
+    @Transient
     public Double getTotalPaye(LocalDateTime since) {
         Double total = 0.0;
         for (Paiement paiement : paiements) {
@@ -108,7 +121,7 @@ public class Ticket {
     @Transient
     @Transactional
     public Paiement payer(Double montant, Long idCaisse, PaiementRepository paiementRepository,
-            MouvementCaisseRepository mouvementCaisseRepository , CaisseRepository caisseRepository) throws Exception {
+            MouvementCaisseRepository mouvementCaisseRepository, CaisseRepository caisseRepository) throws Exception {
         if (montant <= 0) {
             throw new Exception("Montant doit être positif");
         }
@@ -133,20 +146,23 @@ public class Ticket {
     }
 
     // @Transient
-    // public List<Paiement> toutPayer(Double montant, String strIdCaisse, TicketRepository ticketRepository,
-    //         PaiementRepository paiementRepository,
-    //         MouvementCaisseRepository mouvementCaisseRepository , CaisseRepository caisseRepository) throws Exception {
-    //     List<Paiement> paiements = new ArrayList<>();
-    //     List<Ticket> tickets = new ArrayList<>();
-    //     tickets.add(this);
-    //     tickets.addAll(this.getByAsocieGroupe(ticketRepository));
-    //     double aPayer = montant / tickets.size();
-    //     for (Ticket ticket : tickets) {
-    //         Paiement paiement = ticket.payer(aPayer, strIdCaisse, paiementRepository, mouvementCaisseRepository , caisseRepository);
-    //         paiements.add(paiement);
-    //     }
+    // public List<Paiement> toutPayer(Double montant, String strIdCaisse,
+    // TicketRepository ticketRepository,
+    // PaiementRepository paiementRepository,
+    // MouvementCaisseRepository mouvementCaisseRepository , CaisseRepository
+    // caisseRepository) throws Exception {
+    // List<Paiement> paiements = new ArrayList<>();
+    // List<Ticket> tickets = new ArrayList<>();
+    // tickets.add(this);
+    // tickets.addAll(this.getByAsocieGroupe(ticketRepository));
+    // double aPayer = montant / tickets.size();
+    // for (Ticket ticket : tickets) {
+    // Paiement paiement = ticket.payer(aPayer, strIdCaisse, paiementRepository,
+    // mouvementCaisseRepository , caisseRepository);
+    // paiements.add(paiement);
+    // }
 
-    //     return paiements;
+    // return paiements;
     // }
 
     @Transient
@@ -166,7 +182,7 @@ public class Ticket {
         for (Ticket ticket : this.getByAsocieGroupe(ticketRepository)) {
             ticketStrIds.add(ticket.getStrId());
             // montantTotal += ticket.getPlace().getBloc().getPrix().doubleValue();
-            restePaye+= ticket.getRestPaye(LocalDateTime.now());
+            restePaye += ticket.getRestPaye(LocalDateTime.now());
         }
         fiche.setTicketStrIds(ticketStrIds);
         // fiche.setMontantTotal(montantTotal);

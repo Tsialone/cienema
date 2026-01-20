@@ -53,7 +53,21 @@ public class Salle {
     public Integer getCapaciteMax () {
         return places != null ? places.size() : 0;
     }
+    @Transient
+    public Double getCa (LocalDateTime date){
+        Double resp = 0.0;
+        for (Seance seance : seances) {
+            for (Ticket ticket : seance.getTickets()) {
+                for (Paiement paiement : ticket.getPaiements()) {
+                    if (paiement.getCreated().isBefore(date) || paiement.getCreated().isEqual(date)) {
+                        resp += paiement.getMontant().doubleValue();
+                    }
+                }
+            }   
+        }
+        return resp;
 
+    }
     @Transient
     public Double getMaxPrixPlace() {
         Double maxPrix = 0.0;
@@ -89,7 +103,20 @@ public class Salle {
         for (Place place : this.places) {
             if (place.isDispo(date, ticketRepository)) {
                 dispoPlaces.add(place);
-                
+            }
+            
+        }
+        return  dispoPlaces;
+    }
+
+     @Transient
+    public List<Place> getPlaceDispo(LocalDateTime date  , Long idCategoriePlace  , TicketRepository ticketRepository) {
+
+        List<Place> dispoPlaces = new ArrayList<>();
+        // System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        for (Place place : this.places) {
+            if (place.isDispo(date, ticketRepository)  && place.getCategoriePlace().getIdCp().equals(idCategoriePlace)) {
+                dispoPlaces.add(place);
             }
             
         }

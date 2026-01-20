@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class ClientForm {
     private String nom;
-    private Long idGenre;
+    private Long idCategorie;
 
     public void control() throws Exception {
         if (nom == null || nom.trim().isEmpty()) {
             throw new Exception("Le nom du client est obligatoire.");
         }
-        if (idGenre == null) {
-            throw new Exception("Le genre est obligatoire.");
+        if (idCategorie == null) {
+            throw new Exception("La catégorie est obligatoire.");
         }
     }
 }

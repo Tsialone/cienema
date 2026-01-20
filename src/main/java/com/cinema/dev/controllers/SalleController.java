@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,10 @@ public class SalleController {
         if (dateDebut != null && timeFilter != null) {
             dateTimeFilter = LocalDateTime.of(dateDebut, timeFilter);
         }
+        // System.out.println(Arrays.asList(dateDebut , heure , timeFilter , dateTimeFilter));
+        if (dateTimeFilter == null) {
+            dateTimeFilter = LocalDateTime.now();
+        }
 
         List<Salle> salles = salleRepository.findAll();
         List<SalleDetail> salleDetails = new ArrayList<>();
@@ -54,6 +59,7 @@ public class SalleController {
             detail.setCapacite(String.valueOf(salle.getCapaciteMax()));
             // System.out.println("dateTimeFilter: " + dateTimeFilter);
             detail.setRevenuMax(String.valueOf(salle.getMaxPrixPlace(dateTimeFilter)));
+            detail.setRevenuActuel(String.valueOf(salle.getCa(dateTimeFilter)));
             salleDetails.add(detail);
         }
 

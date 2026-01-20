@@ -7,4 +7,5 @@ public class SalleDetail {
     public String idSalle;
     public String capacite;
     public String revenuMax;
+    public String revenuActuel;
 }
