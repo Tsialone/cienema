@@ -17,6 +17,7 @@ import org.aspectj.apache.bcel.generic.InstructionConstants.Clinit;
 import com.cinema.dev.forms.ReservationForm;
 import com.cinema.dev.repositories.CaisseRepository;
 import com.cinema.dev.repositories.CategHeritRepository;
+import com.cinema.dev.repositories.CategorieRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
@@ -59,18 +60,19 @@ public class Reservation {
     @Transient
     public Double montant ;
     @Transient
-    public Double getMontantTotal (RemiseRepository remiseRepository){
+    public Double getMontantTotal (RemiseRepository remiseRepository , CategHeritRepository categHeritRepository , CategorieRepository categorieRepository) {
         if (this.tickets == null || this.tickets.size() ==0){
             return 0.0;
         }
         Double total = 0.0;
        for (Ticket ticket : tickets) {
-            Remise remise = Remise.getRemiseByIdCategPlaceClientByDateTime(ticket.getPlace().getCategoriePlace().getIdCp(), ticket.getClient().getCategorie().getIdCategorie(),  this.getDateReservation(), remiseRepository).orElse(null);
+            // Remise remise = Remise.getRemiseByIdCategPlaceClientByDateTime(ticket.getPlace().getCategoriePlace().getIdCp(), ticket.getClient().getCategorie().getIdCategorie(),  this.getDateReservation(), remiseRepository).orElse(null);
             
-            Double montant = ticket.getPlace().getPrixPlace(this.getDateReservation());
-            if (remise != null) {
-                // montant =  remise.getMontant().doubleValue();
-            }
+            Double montant = ticket.getMontant(categHeritRepository, categorieRepository, remiseRepository);
+            System.out.println("montant ticket id " + ticket.getIdTicket() + " : " + montant);
+            // if (remise != null) {
+            //     // montant =  remise.getMontant().doubleValue();
+            // }
             total += montant;
         }
         return total;
@@ -119,6 +121,7 @@ public class Reservation {
             ticket.setFilm(film);
             ticket.setSeance(seance);
             ticket.setReservation(reservation);
+            ticket.setCreated(LocalDateTime.now());
             ticket = ticketRepository.save(ticket);
             tickets.add(ticket);   
         }

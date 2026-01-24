@@ -24,6 +24,7 @@ import com.cinema.dev.models.Ticket;
 import com.cinema.dev.repositories.CaisseRepository;
 import com.cinema.dev.repositories.CategHeritRepository;
 import com.cinema.dev.repositories.CategoriePlaceRepository;
+import com.cinema.dev.repositories.CategorieRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
@@ -56,7 +57,7 @@ public class ReservationController {
     private final RemiseRepository remiseRepository;
     private final CategHeritRepository  categHeritRepository;
     private final CategoriePlaceRepository categoriePlaceRepository;
-
+    private final CategorieRepository categorierep;
     @GetMapping("/saisie")
     public String getSaisie(Model model,
             @RequestParam(required = true) String dateSeance,
@@ -72,7 +73,7 @@ public class ReservationController {
             model.addAttribute("salle", salle);
             List<Place> places = salle.getPlaceDispo(dateTime, ticketRepository);
             for (Place place : places) {
-                place.setPrixPlace(place.getPrixPlace(dateTime));
+                // place.setPrixPlace(place.getPrixPlace(dateTime));
             }
 
             model.addAttribute("places", places);
@@ -96,7 +97,7 @@ public class ReservationController {
     public String getListe(Model model) {
         List<Reservation> reservations = reservationRepository.findAll();
         for (Reservation reservation : reservations) {
-            reservation.montant = reservation.getMontantTotal(remiseRepository);
+            reservation.montant = reservation.getMontantTotal(remiseRepository , categHeritRepository ,  categorierep);
         }
         model.addAttribute("reservations", reservations);
         model.addAttribute("content", "pages/reservations/reservation-liste");

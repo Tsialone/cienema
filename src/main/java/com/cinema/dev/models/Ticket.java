@@ -22,6 +22,7 @@ import com.cinema.dev.repositories.TicketRepository;
 import com.cinema.dev.views.TicketFiche;
 import com.cinema.dev.repositories.CaisseRepository;
 import com.cinema.dev.repositories.CategHeritRepository;
+import com.cinema.dev.repositories.CategorieRepository;
 import com.cinema.dev.repositories.ClientRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.MouvementCaisseRepository;
@@ -61,6 +62,9 @@ public class Ticket {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
+    @Column (name = "created")
+    private LocalDateTime created;
+
     @Transient
     private LocalDateTime datePrevue;
 
@@ -80,12 +84,16 @@ public class Ticket {
     }
 
     @Transient
-    public Double getMontant(CategHeritRepository categHeritRepository , RemiseRepository remiseRepository) {
-        Long idcl = this.getClient().getIdClient();
-        LocalDateTime dateReservation = reservation.getDateReservation();
-        Categorie him = this.getClient().getCategorie();
-
-        Double montant = him.getRealPrix(idcl, dateReservation, categHeritRepository, remiseRepository);
+    public Double getMontant(CategHeritRepository categHeritRepository, CategorieRepository categorieRepository,
+            RemiseRepository remiseRepository) {
+        Long categorieClientId = this.getClient().getCategorie().getIdCategorie();
+        LocalDateTime dateReservation = this.getCreated();
+        Place place = this.getPlace();
+        Double montant = 0.0;
+        if (place != null) {
+            montant = place.getPrixPlace(dateReservation, categorieClientId, categorieRepository, categHeritRepository,
+                    remiseRepository);
+        }
 
         return montant;
     }

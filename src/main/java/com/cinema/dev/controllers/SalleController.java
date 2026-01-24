@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cinema.dev.models.Categorie;
 import com.cinema.dev.models.Salle;
+import com.cinema.dev.repositories.CategHeritRepository;
+import com.cinema.dev.repositories.CategorieRepository;
+import com.cinema.dev.repositories.RemiseRepository;
 import com.cinema.dev.repositories.SalleRepository;
 import com.cinema.dev.repositories.SeanceRepository;
 import com.cinema.dev.views.SalleDetail;
@@ -27,6 +31,9 @@ public class SalleController {
 
     private final SalleRepository salleRepository;
     private final SeanceRepository seanceRepository;
+    private final CategorieRepository categorieRepository;
+    private final CategHeritRepository categHeritRepository;
+    private final RemiseRepository remiseRepository;
 
     @GetMapping("/liste")
     public String getListe(Model model,
@@ -59,7 +66,7 @@ public class SalleController {
             detail.setCapacite(String.valueOf(salle.getCapaciteMax()));
             // System.out.println("dateTimeFilter: " + dateTimeFilter);
             detail.setRevenuMax(String.valueOf(salle.getMaxPrixPlace(dateTimeFilter)));
-            detail.setRevenuActuel(String.valueOf(salle.getCa(dateTimeFilter)));
+            detail.setRevenuActuel(String.valueOf(salle.getCa(dateTimeFilter, categorieRepository, categHeritRepository, remiseRepository)));
             salleDetails.add(detail);
         }
 

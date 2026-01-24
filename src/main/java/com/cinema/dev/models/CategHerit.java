@@ -35,7 +35,7 @@ public class CategHerit {
 
     @ManyToOne
     @JoinColumn(name = "id_categorie_1")
-    private Categorie categorie1;
+    private Categorie parent;
 
     @Transient
     public final String str = "CH";

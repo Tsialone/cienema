@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cinema.dev.models.Seance;
+import com.cinema.dev.repositories.CommandeRepository;
 import com.cinema.dev.repositories.FilmRepository;
 import com.cinema.dev.repositories.SalleRepository;
 import com.cinema.dev.repositories.SeanceRepository;
@@ -29,6 +30,7 @@ public class SeanceController {
     private final SeanceRepository seanceRepository;
     private final SalleRepository salleRepository;
     private final FilmRepository filmRepository;
+    private final CommandeRepository commandeRepository;
 
     @GetMapping("/liste")
     public String getListe(Model model,
@@ -49,6 +51,21 @@ public class SeanceController {
         }
         for (SeanceDetail detail : seances) {
             Seance seance = seanceRepository.findById(Long.valueOf(detail.getIdSeance())).orElse(null);
+            double caTicket = seance != null ? seance.getChiffreAffaire() : 0.00;
+            double caPub = seance != null ? seance.getChiffreAffairePub() : 0.00;
+           detail.setMontantTicketVendue(caTicket);
+           detail.setMontantPubVendue(caPub);
+
+           double payer = seance != null ? seance.getTotalPayer(commandeRepository) : 0.00;
+        //    double restePaye   = 0.0;
+           double restePaye   = (seance != null ? (seance.getChiffreAffairePub()) : 0.00) - payer;
+
+           detail.setMontantPayer(payer);
+           detail.setMontantRestePayer(restePaye);
+
+           detail.setTotalCa(caTicket + payer);
+
+
             // if (seance != null){
             // detail.setMaxRevenu(seance.getMaxRevenu(dateTimeFilter));
             seanceEntities.add(seance);

@@ -5,7 +5,7 @@
         </div>
 
         <div class="card-body">
-            <div class="row mb-4">
+            <div class="row mb-2">
                 <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                     <div class="card border-primary h-100">
                         <div class="card-body">
@@ -22,14 +22,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                <!-- <div class="col-lg-4 col-md-6">
                     <div class="card border-warning h-100">
                         <div class="card-body">
                             <p class="text-muted mb-1">Chiffre d'Affaires</p>
                             <h4 class="mb-0" th:text="${seanceRecap != null ? #numbers.formatDecimal(seanceRecap.chiffreAffaire,1,'COMMA',2,'POINT') : '0.00'}">0.00</h4>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <hr/>
             <form th:action="@{/seances/liste}" method="get" class="mb-4">
@@ -82,6 +82,14 @@
                             <th>Séance</th>
                             <th>Date</th>
                             <th>Heure</th>
+                            <th>Ticket vendue</th>
+                            <th>pub vendue</th>
+                            <th>Pub Total payer</th>
+                            <th>Pub reste payer</th>
+                            <th>Total Ca</th>
+
+
+
                             <th>Salle</th>
                             <th>Film</th>
                             <th>Durée</th>
@@ -94,6 +102,18 @@
                             <td th:text="'SEC' + ${seance.idSeance}"></td>
                             <td th:text="${seance.debut}"></td>
                             <td th:text="${seance.heure}"></td>
+                            <!-- <td th:text="${seance.montantTicketVendue} + 'Ar'"></td> -->
+                            <!-- <td th:text="$${#numbers.formatDecimal(seance.montantTicketVendue, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td> -->
+                            <td th:text="${#numbers.formatDecimal(seance.montantTicketVendue, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td>
+                            <td th:text="${#numbers.formatDecimal(seance.montantPubVendue, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td>
+                            <td th:text="${#numbers.formatDecimal(seance.montantPayer, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td>
+                            <td th:text="${#numbers.formatDecimal(seance.montantRestePayer, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td>
+                            <td th:text="${#numbers.formatDecimal(seance.totalCa, 0, 'COMMA', 2, 'POINT')} + ' Ar'"></td>
+
+
+
+
+
                             <td th:text="${seance.salleNom}"></td>
                             <td th:text="${seance.filmNom}"></td>
                             <td th:text="${seance.filmDuree}"></td>

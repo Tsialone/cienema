@@ -72,6 +72,7 @@ CREATE TABLE prix_c(
 CREATE TABLE remise(
    id_remise SERIAL,
    montant NUMERIC(15,2)   NOT NULL,
+   created TIMESTAMP NOT NULL,
    id_categorie INTEGER NOT NULL,
    id_cp INTEGER NOT NULL,
    PRIMARY KEY(id_remise),
@@ -109,6 +110,7 @@ CREATE TABLE place(
 
 CREATE TABLE ticket(
    id_ticket SERIAL,
+   created TIMESTAMP NOT NULL,
    id_seance INTEGER NOT NULL,
    id_reservation INTEGER,
    id_place INTEGER NOT NULL,
@@ -134,6 +136,7 @@ CREATE TABLE paiement(
    FOREIGN KEY(id_mc) REFERENCES mouvement_caisse(id_mc)
 );
 
+
 -- Insert data
 INSERT INTO film(nom, duree) VALUES 
 ('Avatar', '02:42:00'),
@@ -142,21 +145,20 @@ INSERT INTO film(nom, duree) VALUES
 ('The Dark Knight', '02:32:00');
 
 INSERT INTO salle(nom, capacite) VALUES 
-('Salle A', 100),
-('Salle B', 120),
-('Salle C', 80);
+('Salle A', 4),
+('Salle B', 4);
 
 
 
 INSERT INTO categorie_p(libelle, prix_defaut) VALUES 
 ('Standard', 20000.00),
-('Premium', 50000.00),  
-('VIP', 100000.00);
+('Premium', 30000.00),  
+('VIP', 45000.00);
 
--- INSERT INTO prix_c(created, prix, id_cp) VALUES 
--- (NOW(), 122.00, 1),
--- (NOW(), 50000.00, 2),
--- (NOW(), 100000.00, 3);
+INSERT INTO prix_c(created, prix, id_cp) VALUES 
+('2000-01-13 14:00:00', 20000.00, 1),
+('2000-01-13 14:00:00', 30000.00, 2),
+('2000-01-13 14:00:00', 45000.00, 3);
 
 -- INSERT INTO categorie_prix(id_cp, id_pc, prix, created) VALUES 
 -- (1, 1, 20000.00, NOW()),
@@ -165,28 +167,22 @@ INSERT INTO categorie_p(libelle, prix_defaut) VALUES
 -- (3, 1, 90000.00, NOW());
 
 
-INSERT INTO place(numero, id_cp, id_salle) VALUES 
--- Salle A (100 places): 70 Standard + 20 Premium + 10 VIP
--- Standard: places 1-70
-(1, 1, 1), (2, 1, 1), (3, 1, 1), (4, 1, 1), (5, 1, 1), (6, 1, 1), (7, 1, 1), (8, 1, 1), (9, 1, 1), (10, 1, 1),
-(11, 1, 1), (12, 1, 1), (13, 1, 1), (14, 1, 1), (15, 1, 1), (16, 1, 1), (17, 1, 1), (18, 1, 1), (19, 1, 1), (20, 1, 1),
-(21, 1, 1), (22, 1, 1), (23, 1, 1), (24, 1, 1), (25, 1, 1), (26, 1, 1), (27, 1, 1), (28, 1, 1), (29, 1, 1), (30, 1, 1),
-(31, 1, 1), (32, 1, 1), (33, 1, 1), (34, 1, 1), (35, 1, 1), (36, 1, 1), (37, 1, 1), (38, 1, 1), (39, 1, 1), (40, 1, 1),
-(41, 1, 1), (42, 1, 1), (43, 1, 1), (44, 1, 1), (45, 1, 1), (46, 1, 1), (47, 1, 1), (48, 1, 1), (49, 1, 1), (50, 1, 1),
-(51, 1, 1), (52, 1, 1), (53, 1, 1), (54, 1, 1), (55, 1, 1), (56, 1, 1), (57, 1, 1), (58, 1, 1), (59, 1, 1), (60, 1, 1),
-(61, 1, 1), (62, 1, 1), (63, 1, 1), (64, 1, 1), (65, 1, 1), (66, 1, 1), (67, 1, 1), (68, 1, 1), (69, 1, 1), (70, 1, 1),
--- Premium: places 71-90
-(71, 2, 1), (72, 2, 1), (73, 2, 1), (74, 2, 1), (75, 2, 1), (76, 2, 1), (77, 2, 1), (78, 2, 1), (79, 2, 1), (80, 2, 1),
-(81, 2, 1), (82, 2, 1), (83, 2, 1), (84, 2, 1), (85, 2, 1), (86, 2, 1), (87, 2, 1), (88, 2, 1), (89, 2, 1), (90, 2, 1),
--- VIP: places 91-100
-(91, 3, 1), (92, 3, 1), (93, 3, 1), (94, 3, 1), (95, 3, 1), (96, 3, 1), (97, 3, 1), (98, 3, 1), (99, 3, 1), (100, 3, 1);
+-- INSERT INTO place(numero, id_cp, id_salle) VALUES 
+-- (1, 1, 1), 
+-- (2, 1, 1), 
+-- (3, 2, 1), 
+-- (4, 3, 1),
+-- (1, 1, 2),
+
+-- (2, 1, 2),
+-- (3, 2, 2),
+-- (4, 3, 2);
 
 INSERT INTO seance(date_time_debut, id_salle, id_film) VALUES 
 ('2026-01-13 14:00:00', 1, 1),
 ('2026-01-13 17:00:00', 1, 2),
 ('2026-01-13 20:00:00', 2, 3),
-('2026-01-14 14:00:00', 2, 4),
-('2026-01-14 18:00:00', 3, 1);
+('2026-01-14 14:00:00', 2, 4);
 
 INSERT INTO caisse(nom) VALUES 
 ('Caisse Principale'),
@@ -199,34 +195,53 @@ INSERT INTO mouvement_caisse(debit, credit, created, id_caisse) VALUES
 
 INSERT INTO categorie(libelle) VALUES 
 ('Adulte'),
+('Adolescent'),
 ('Enfant');
-
+   
 INSERT INTO client(nom, id_categorie) VALUES 
-('Jean Dupont', 2),
-('Marie Martin', 1),
-('Pierre Durand', 2),
-('Sophie Leclerc', 1);
+('Jean Dupont - Adulte', 1),
+('Marie Martin - Adolescent', 2),
+('Pierre Durand - Enfant', 3);
 
 INSERT INTO categ_herit(pourcentage, id_categorie, id_categorie_1) VALUES 
-(50.00, 2, 1);
+(50.00, 3, 1);
 
 INSERT INTO remise(montant, id_categorie, id_cp , created) VALUES 
--- Remise pour Adulte (10% sur toutes les catégories)
-(10.00, 1, 1 , NOW ()),
-(10.00, 1, 2 , NOW ()),
-(10.00, 1, 3 , NOW ()),
+(30000.00, 1, 1 , '2000-01-13 14:00:00'),
+(40000.00, 1, 2 , '2000-01-13 14:00:00'),
+(80000.00, 1, 3 , '2000-01-13 14:00:00'),
+
+(20000.00, 2, 1 , '2000-01-13 14:00:00'),
+(30000.00, 2, 2 , '2000-01-13 14:00:00'),
+(45000.00, 2, 3 , '2000-01-13 14:00:00');
+
+
+
+
+
+
+
+
+
+
+
+
+-- 50000
+
+
+
+
+
+
 -- Remise pour Enfant (50% - héritage de Adulte)
-(50.00, 2, 1 , NOW ()),
-(50.00, 2, 2 , NOW ()),
-(50.00, 2, 3 , NOW ());
+-- (50.00, 3, 1 , NOW ()),
+-- (50.00, 3, 2 , NOW ()),
+-- (50.00, 3, 3 , NOW ());
 
-INSERT INTO ticket(id_seance, id_place, id_film, id_client) VALUES 
-(1, 1, 1, 1),
-(1, 2, 1, 2),
-(2, 6, 2, 3),
-(2, 7, 2, 4),
-(3, 11, 3, 1);
-
+-- INSERT INTO ticket(id_seance, id_place, id_film, id_client , created) VALUES 
+-- (1, 1, 1, 1, NOW()),
+-- (1, 2, 1, 2, NOW()),
+-- (2, 3, 2, 3, NOW());
 
 
 -- manova prix billet vip adult

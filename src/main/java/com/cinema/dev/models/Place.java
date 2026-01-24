@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.cinema.dev.repositories.CategHeritRepository;
+import com.cinema.dev.repositories.CategorieRepository;
 import com.cinema.dev.repositories.PlaceRepository;
+import com.cinema.dev.repositories.RemiseRepository;
 import com.cinema.dev.repositories.ReservationRepository;
 import com.cinema.dev.repositories.TicketRepository;
 import com.cinema.dev.utils.DateUtils;
@@ -41,8 +44,8 @@ public class Place {
     @JoinColumn(name = "id_salle", nullable = false)
     private Salle salle;
 
-    @Transient
-    private Double prixPlace;
+    // @Transient
+    // private Double prixPlace;
 
     @Transient
     public static Place getByNumeroPlace(PlaceRepository placeRepository, Long numero) {
@@ -61,6 +64,30 @@ public class Place {
     // public Double getPrixPlace() {
     //     return this.categoriePlace.getPrixRecent().doubleValue();
     // }
+    @Transient
+    public Double getPrixPlace (LocalDateTime dateTime , Long categorieClientId   ,  CategorieRepository categorieRepository , CategHeritRepository categorieH , RemiseRepository remiseRepository) {
+        Double prix = this.getPrixPlace(dateTime);
+
+        // System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx: " + prix +  " date " + dateTime);
+
+
+        // if (categorieId == null) return prix;
+        // Categorie categorie = Categorie.getById(categorieClientId, categorieRepository);
+        // if (categorie != null) {
+        //     Double remiseValue = categorie.getRemiseValByCategPlace(prix, categorieClientId, this.categoriePlace.getIdCp(), dateTime, categorieH, remiseRepository);
+        //     System.out.println("remiseValue: " + remiseValue + " for categorie " + categorie.getLibelle() + " and place " + this.getStrId() + " at date " + dateTime);
+        //     if (remiseValue != null && remiseValue > 0) {
+        //         // System.out.println("Remise appliquée de " + remiseValue + " pour la place " + this.getStrId() + " et la catégorie " + categorie.getLibelle() + " pour la date " + dateTime);
+        //         prix =  remiseValue;
+        //     }
+        // }
+
+
+        return prix;
+
+
+
+    }
 
     @Transient
     public Double getPrixPlace(LocalDateTime dateTime) {
@@ -87,6 +114,10 @@ public class Place {
 
             if (this.idPlace.equals(ticket.getPlace().getIdPlace())
                     && DateUtils.isConflit(debut, fin, dateTime, dateTimeFin)) {
+
+                        System.out.println("Place non dispo: " + this.getStrId() + " pour la date " + dateTime);
+                        System.out.println("Conflit avec la séance du " + debut + " au " + fin);
+                        System.out.println("\n");
                 return false;
             }
             if (this.idPlace.equals(ticket.getPlace().getIdPlace())) {

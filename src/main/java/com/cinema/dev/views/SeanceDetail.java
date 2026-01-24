@@ -19,6 +19,14 @@ public class SeanceDetail {
     private String filmNom;
     private String filmDuree;
     private String heure;
-
+    
     private Double maxRevenu;
+    private Double montantTicketVendue;
+    private Double montantPubVendue;
+
+    private Double montantRestePayer;
+    private Double montantPayer;
+
+    private Double totalCa;
+
 }

@@ -30,6 +30,9 @@ public class Remise {
     @Column(name = "montant", nullable = false)
     private BigDecimal montant;
 
+    @Column(name = "created", nullable = false)
+    private LocalDateTime created;
+
     @ManyToOne
     @JoinColumn(name = "id_categorie", nullable = false)
     private Categorie categorie;
